@@ -5,6 +5,16 @@ var app = express();
 const bodyParser = require('body-parser');
 const PORT = 9000;
 
+const buildLocation = 'dist';
+app.use(express.static(`${buildLocation}`));
+app.use((req, res, next) => {
+  if (!req.originalUrl.includes(buildLocation)) {
+    res.sendFile(`${__dirname}/${buildLocation}/index.html`);
+  } else {
+    next();
+  }
+});
+
 app.use(cors())
 app.use(bodyParser.json());
 
