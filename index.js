@@ -1,19 +1,27 @@
 const mysql = require('mysql');
 const express = require('express');
 const cors = require("cors");
+const http = require('http');
+const fs = require('fs');
 var app = express();
 const bodyParser = require('body-parser');
 const PORT = 9000;
 
-const buildLocation = 'dist';
-app.use(express.static(`${buildLocation}`));
-app.use((req, res, next) => {
-  if (!req.originalUrl.includes(buildLocation)) {
-    res.sendFile(`${__dirname}/${buildLocation}/index.html`);
-  } else {
-    next();
-  }
-});
+http.createServer((req, res) => {
+    fs.readFile('index.html', 'utf-8', (err, content) => {
+      if (err) {
+        console.log('We cannot open "index.html" file.')
+      }
+      res.writeHead(200, {
+        'Content-Type': 'text/html; charset=utf-8',
+      })
+
+      res.end(content)
+    })
+  })
+  .listen(PORT, () => {
+    console.log('Server listening on: ', PORT)
+})
 
 app.use(cors())
 app.use(bodyParser.json());
