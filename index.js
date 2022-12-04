@@ -91,7 +91,7 @@ app.post('/api/products', (req, res) => {
 });
 
 // Update a Products
-app.post('/api/products', (req, res) => {  
+app.put('/api/products/:id', (req, res) => {  
     const note = req.body    
     const data = [note.name, note.price, note.description, req.params.id]    
     mysqlConnection.query('UPDATE products SET name = ?, price = ?, description = ? WHERE id = ?', data, (err, result)=> {                   
