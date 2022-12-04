@@ -51,8 +51,8 @@ app.get('/api/products', (req, res) => {
 // Get a Products
 app.get('/api/products/:id', (req, res) => {    
     mysqlConnection.query('SELECT * FROM products WHERE id = ?', [req.params.id], (err, rows, fields)=> {                   
-            if (!err) {            
-                res.send(rows);
+            if (!err) {          
+               return res.json(rows)
             } else {
                 console.log(err);
             }   
@@ -65,7 +65,7 @@ app.get('/api/products/:id', (req, res) => {
 app.delete('/api/products/:id', (req, res) => {    
     mysqlConnection.query('DELETE FROM products WHERE id = ?', [req.params.id], (err, rows, fields)=> {                   
             if (!err) {            
-                res.send({success: 400});
+                res.send({success: true});
             } else {
                 console.log(err);
             }   
