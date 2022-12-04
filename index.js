@@ -62,16 +62,28 @@ app.get('/api/products', (req, res) => {
     
 });
 
-
-// Delete a Products
-app.get('/api/products', (req, res) => {    
-    mysqlConnection.query('SELECT * FROM products', (err, rows, fields)=> {
+// Get a Products
+app.get('/api/products/:id', (req, res) => {    
+    mysqlConnection.query('SELECT * FROM products WHERE id = ?', [req.params.id], (err, rows, fields)=> {
         
         if (!err) {            
             res.send(rows);
         } else {
-            console.log(err);
+            console.log("Không tìm thấy sản phẩm.");
         }
     })
     
 });
+
+// // Delete a Products
+// app.get('/api/products', (req, res) => {    
+//     mysqlConnection.query('SELECT * FROM products', (err, rows, fields)=> {
+        
+//         if (!err) {            
+//             res.send(rows);
+//         } else {
+//             console.log(err);
+//         }
+//     })
+    
+// });
