@@ -1,27 +1,27 @@
 const mysql = require('mysql');
 const express = require('express');
 const cors = require("cors");
-const http = require('http');
+// const http = require('http');
 const fs = require('fs');
 var app = express();
 const bodyParser = require('body-parser');
 const PORT = 9000;
 
-http.createServer((req, res) => {
-    fs.readFile('index.html', 'utf-8', (err, content) => {
-      if (err) {
-        console.log('We cannot open "index.html" file.')
-      }
-      res.writeHead(200, {
-        'Content-Type': 'text/html; charset=utf-8',
-      })
+// http.createServer((req, res) => {
+//     fs.readFile('index.html', 'utf-8', (err, content) => {
+//       if (err) {
+//         console.log('We cannot open "index.html" file.')
+//       }
+//       res.writeHead(200, {
+//         'Content-Type': 'text/html; charset=utf-8',
+//       })
 
-      res.end(content)
-    })
-  })
-  .listen(PORT, () => {
-    console.log('Server listening on: ', PORT)
-})
+//       res.end(content)
+//     })
+//   })
+//   .listen(PORT, () => {
+//     console.log('Server listening on: ', PORT)
+// })
 
 app.use(cors())
 app.use(bodyParser.json());
