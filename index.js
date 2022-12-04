@@ -2,26 +2,12 @@ const mysql = require('mysql');
 const express = require('express');
 const cors = require("cors");
 // const http = require('http');
+const { nanoid } = require("nanoid");
 const fs = require('fs');
 var app = express();
 const bodyParser = require('body-parser');
 const PORT = 9000;
 
-// http.createServer((req, res) => {
-//     fs.readFile('index.html', 'utf-8', (err, content) => {
-//       if (err) {
-//         console.log('We cannot open "index.html" file.')
-//       }
-//       res.writeHead(200, {
-//         'Content-Type': 'text/html; charset=utf-8',
-//       })
-
-//       res.end(content)
-//     })
-//   })
-//   .listen(PORT, () => {
-//     console.log('Server listening on: ', PORT)
-// })
 
 app.use(cors())
 app.use(bodyParser.json());
@@ -64,26 +50,57 @@ app.get('/api/products', (req, res) => {
 
 // Get a Products
 app.get('/api/products/:id', (req, res) => {    
-    mysqlConnection.query('SELECT * FROM products WHERE id = ?', [req.params.id], (err, rows, fields)=> {
-        
-        if (!err) {            
-            res.send(rows);
-        } else {
-            console.log("Không tìm thấy sản phẩm.");
-        }
+    mysqlConnection.query('SELECT * FROM products WHERE id = ?', [req.params.id], (err, rows, fields)=> {                   
+            if (!err) {            
+                res.send(rows);
+            } else {
+                console.log(err);
+            }   
+       
     })
     
 });
 
-// // Delete a Products
-// app.get('/api/products', (req, res) => {    
-//     mysqlConnection.query('SELECT * FROM products', (err, rows, fields)=> {
-        
-//         if (!err) {            
-//             res.send(rows);
-//         } else {
-//             console.log(err);
-//         }
-//     })
+// Delete a Products
+app.delete('/api/products/:id', (req, res) => {    
+    mysqlConnection.query('DELETE FROM products WHERE id = ?', [req.params.id], (err, rows, fields)=> {                   
+            if (!err) {            
+                res.send({success: 400});
+            } else {
+                console.log(err);
+            }   
+       
+    })
     
-// });
+});
+
+// Insert a Products
+app.post('/api/products', (req, res) => {  
+    const note = req.body
+    
+    const data = {id: nanoid(), name: note.name, price: note.price, description: note.description}    
+    mysqlConnection.query('INSERT INTO products SET ?', data, (err, result)=> {                   
+            if (!err) {            
+                res.send({success: true});
+            } else {
+                console.log(err);
+            }   
+       
+    })
+    
+});
+
+// Update a Products
+app.post('/api/products', (req, res) => {  
+    const note = req.body    
+    const data = [note.name, note.price, note.description, req.params.id]    
+    mysqlConnection.query('UPDATE products SET name = ?, price = ?, description = ? WHERE id = ?', data, (err, result)=> {                   
+            if (!err) {            
+                res.send({success: true});
+            } else {
+                console.log(err);
+            }   
+       
+    })
+    
+});
